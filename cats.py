@@ -1,5 +1,4 @@
 """Typing test implementation"""
-
 from utils import (
     lower,
     split,
@@ -38,6 +37,13 @@ def pick(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    found_count = 0
+    for paragraph in paragraphs:
+        if select(paragraph):
+            if found_count == k:
+                return paragraph
+            found_count += 1    
+    return ''
     # END PROBLEM 1
 
 
@@ -56,9 +62,35 @@ def about(keywords):
     """
     assert all([lower(x) == x for x in keywords]), "keywords should be lowercase."
 
-    # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
-    # END PROBLEM 2
+    # def convert_to_words(paragraph):
+    #     words = []
+    #     word = ""
+    #     for letter in paragraph:
+    #         if letter == ' ':
+    #             words.append(lower(word))
+    #             word = ""
+    #         elif letter.isalpha():
+    #             word += letter
+    #         else:
+    #             continue
+    #     if word != "":
+    #         words.append(lower(word))
+    #     return words
+
+    # # BEGIN PROBLEM 2
+    # def about_what(paragraph):
+    #     words = convert_to_words(paragraph)
+    #     for word in words:
+    #         for keyword in keywords:
+    #             if word == keyword:
+    #                 return True
+    #     return False
+    # return about_what
+    # # END PROBLEM 2
+    def about_what(paragraph):
+        words = split(remove_punctuation(lower(paragraph)))
+        return any(word in keywords for word in words)
+    return about_what
 
 
 def accuracy(typed, source):
