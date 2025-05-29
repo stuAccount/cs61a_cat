@@ -120,6 +120,15 @@ def accuracy(typed, source):
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if not typed_words and not source_words:
+        return 100.0
+    if not typed_words:
+        return 0.0
+    correct = 0
+    for i in range(min(len(typed_words),len(source_words))):
+        if typed_words[i] == source_words[i]:
+            correct += 1
+    return (correct / len(typed_words)) * 100.0
     # END PROBLEM 3
 
 
@@ -137,7 +146,7 @@ def wpm(typed, elapsed):
     """
     assert elapsed > 0, "Elapsed time must be positive"
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    return (len(typed) / 5) / (elapsed / 60)
     # END PROBLEM 4
 
 
@@ -199,6 +208,22 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     """
     # BEGIN PROBLEM 5
     "*** YOUR CODE HERE ***"
+    # if typed_word in word_list:
+    #     return typed_word
+    # best_word = typed_word
+    # lowest_diff = limit + 1
+    # for word in word_list:
+    #     diff = diff_function(typed_word, word, limit)  
+    #     if diff <= limit and diff < lowest_diff:
+    #         lowest_diff = diff
+    #         best_word = word
+    # return best_word
+    if typed_word in word_list:
+        return typed_word
+    closest_word = min(word_list, key=lambda word: diff_function(typed_word, word, limit))
+    if diff_function(typed_word, closest_word, limit) > limit:
+        return typed_word
+    return closest_word
     # END PROBLEM 5
 
 
@@ -225,7 +250,15 @@ def furry_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    # Exceeded allowed differences; return a value > limit to signal "too different"
+    if limit < 0:
+        return 1
+    if not typed or not source:
+        return abs(len(typed) - len(source))
+    if typed[0] != source[0]:
+        return furry_fixes(typed[1:], source[1:], limit - 1) + 1
+    else:
+        return furry_fixes(typed[1:], source[1:], limit)
     # END PROBLEM 6
 
 
